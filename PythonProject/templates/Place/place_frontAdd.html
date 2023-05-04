@@ -1,0 +1,212 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+<title>会议室添加</title>
+<link href="{% static 'plugins/bootstrap.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/bootstrap-dashen.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/font-awesome.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/animate.css' %}" rel="stylesheet">
+<link href="{% static 'plugins/bootstrap-datetimepicker.min.css' %}" rel="stylesheet" media="screen">
+</head>
+<body style="margin-top:70px;">
+<div class="container">
+{% include 'header.html' %}
+	<div class="col-md-12 wow fadeInLeft">
+		<ul class="breadcrumb">
+  			<li><a href="{% url 'Index:index' %}">首页</a></li>
+  			<li><a href="{% url 'Place:frontList' %}">会议室管理</a></li>
+  			<li class="active">添加会议室</li>
+		</ul>
+		<div class="row">
+			<div class="col-md-10">
+		      	<form class="form-horizontal" name="placeAddForm" id="placeAddForm" enctype="multipart/form-data" method="post"  class="mar_t15">
+				    {% csrf_token %}
+				  <div class="form-group">
+				  	 <label for="place_placeTypeObj_placeTypeId" class="col-md-2 text-right">会议室类型:</label>
+				  	 <div class="col-md-8">
+					    <select id="place_placeTypeObj_placeTypeId" name="place.placeTypeObj.placeTypeId" class="form-control">
+                            {% for placeType in placeTypes %}
+                            <option value="{{ placeType.placeTypeId }}">{{ placeType.placeTypeName }}</option>
+                            {% endfor %}
+					    </select>
+				  	 </div>
+				  </div>
+				  <div class="form-group">
+				  	 <label for="place_placeName" class="col-md-2 text-right">会议室名称:</label>
+				  	 <div class="col-md-8">
+					    <input type="text" id="place_placeName" name="place.placeName" class="form-control" placeholder="请输入会议室名称">
+					 </div>
+				  </div>
+				  <div class="form-group">
+				  	 <label for="place_placePhoto" class="col-md-2 text-right">会议室照片:</label>
+				  	 <div class="col-md-8">
+					    <img  class="img-responsive" id="place_placePhotoImg" border="0px"/><br/>
+							    <input id="place_placePhoto" name="place.placePhoto" type="file" size="50" />
+				  	 </div>
+				  </div>
+				  <div class="form-group">
+				  	 <label for="place_personNum" class="col-md-2 text-right">容纳人数:</label>
+				  	 <div class="col-md-8">
+					    <input type="text" id="place_personNum" name="place.personNum" class="form-control" placeholder="请输入容纳人数">
+					 </div>
+				  </div>
+				  <div class="form-group">
+				  	 <label for="place_placeLocation" class="col-md-2 text-right">会议室位置:</label>
+				  	 <div class="col-md-8">
+					    <input type="text" id="place_placeLocation" name="place.placeLocation" class="form-control" placeholder="请输入会议室位置">
+					 </div>
+				  </div>
+				  <div class="form-group">
+				  	 <label for="place_price" class="col-md-2 text-right">会议室单价:</label>
+				  	 <div class="col-md-8">
+					    <input type="text" id="place_price" name="place.price" class="form-control" placeholder="请输入会议室单价">
+					 </div>
+				  </div>
+				  <div class="form-group">
+				  	 <label for="place_placeDesc" class="col-md-2 text-right">详细介绍:</label>
+				  	 <div class="col-md-8">
+							    <textarea name="place.placeDesc" id="place_placeDesc" style="width:100%;height:300px;"></textarea>
+					 </div>
+				  </div>
+				  <div class="form-group">
+				  	 <label for="place_addTimeDiv" class="col-md-2 text-right">发布时间:</label>
+				  	 <div class="col-md-8">
+		                <div id="place_addTimeDiv" class="input-group date place_addTime col-md-12" data-link-field="place_addTime">
+		                    <input class="form-control" id="place_addTime" name="place.addTime" size="16" type="text" value="" placeholder="请选择发布时间" readonly>
+		                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+		                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+		                </div>
+				  	 </div>
+				  </div>
+		          <div class="form-group">
+		             <span class="col-md-2"></span>
+		             <span onclick="ajaxPlaceAdd();" class="btn btn-primary bottom5 top5">添加</span>
+		          </div> 
+		          <style>#placeAddForm .form-group {margin:5px;}  </style>  
+				</form> 
+			</div>
+			<div class="col-md-2"></div> 
+	    </div>
+	</div>
+</div>
+{% include 'footer.html' %}
+<script src="{% static 'plugins/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/wow.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrapvalidator/js/bootstrapValidator.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'plugins/bootstrap-datetimepicker.min.js' %}" charset="UTF-8"></script>
+<script type="text/javascript" src="{% static 'plugins/locales/bootstrap-datetimepicker.zh-CN.js' %}" charset="UTF-8"></script>
+<script src="{% static 'tiny_mce/tiny_mce.js' %}"></script>
+<script>
+    //实例化详细介绍编辑器
+    tinyMCE.init({
+        selector: "#place_placeDesc",
+        theme: 'advanced',
+        language: "zh",
+        strict_loading_mode: 1,
+    });
+	//提交添加会议室信息
+	function ajaxPlaceAdd() { 
+	    $("#place_placeDesc").text(tinyMCE.editors['place_placeDesc'].getContent());
+		//提交之前先验证表单
+		$("#placeAddForm").data('bootstrapValidator').validate();
+		if(!$("#placeAddForm").data('bootstrapValidator').isValid()){
+			return;
+		}
+		jQuery.ajax({
+			type : "post",
+			url : "{% url 'Place:frontAdd' %}",
+			dataType : "json" , 
+			data: new FormData($("#placeAddForm")[0]),
+			success : function(obj) {
+				if(obj.success){ 
+					alert("保存成功！");
+					location.reload();
+				} else {
+					alert(obj.message);
+				}
+			},
+			processData: false, 
+			contentType: false, 
+		});
+	} 
+$(function(){
+	/*小屏幕导航点击关闭菜单*/
+    $('.navbar-collapse a').click(function(){
+        $('.navbar-collapse').collapse('hide');
+    });
+    new WOW().init();
+	//验证会议室添加表单字段
+	$('#placeAddForm').bootstrapValidator({
+		feedbackIcons: {
+			valid: 'glyphicon glyphicon-ok',
+			invalid: 'glyphicon glyphicon-remove',
+			validating: 'glyphicon glyphicon-refresh'
+		},
+		fields: {
+			"place.placeName": {
+				validators: {
+					notEmpty: {
+						message: "会议室名称不能为空",
+					}
+				}
+			},
+			"place.personNum": {
+				validators: {
+					notEmpty: {
+						message: "容纳人数不能为空",
+					},
+					integer: {
+						message: "容纳人数不正确"
+					}
+				}
+			},
+			"place.placeLocation": {
+				validators: {
+					notEmpty: {
+						message: "会议室位置不能为空",
+					}
+				}
+			},
+			"place.price": {
+				validators: {
+					notEmpty: {
+						message: "会议室单价不能为空",
+					},
+					numeric: {
+						message: "会议室单价不正确"
+					}
+				}
+			},
+			"place.addTime": {
+				validators: {
+					notEmpty: {
+						message: "发布时间不能为空",
+					}
+				}
+			},
+		}
+	}); 
+	//发布时间组件
+	$('#place_addTimeDiv').datetimepicker({
+		language:  'zh-CN',  //显示语言
+		format: 'yyyy-mm-dd hh:ii:ss',
+		weekStart: 1,
+		todayBtn:  1,
+		autoclose: 1,
+		minuteStep: 1,
+		todayHighlight: 1,
+		startView: 2,
+		forceParse: 0
+	}).on('hide',function(e) {
+		//下面这行代码解决日期组件改变日期后不验证的问题
+		$('#placeAddForm').data('bootstrapValidator').updateStatus('place.addTime', 'NOT_VALIDATED',null).validateField('place.addTime');
+	});
+})
+</script>
+</body>
+</html>

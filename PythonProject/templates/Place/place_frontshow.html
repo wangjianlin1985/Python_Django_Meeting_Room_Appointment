@@ -1,0 +1,85 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1 , user-scalable=no">
+  <TITLE>查看会议室详情</TITLE>
+  <link href="{% static 'plugins/bootstrap.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/bootstrap-dashen.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/font-awesome.css' %}" rel="stylesheet">
+  <link href="{% static 'plugins/animate.css' %}" rel="stylesheet">
+</head>
+<body style="margin-top:70px;"> 
+{% include 'header.html' %}
+<div class="container">
+	<ul class="breadcrumb">
+  		<li><a href={% url 'Index:index' %}">首页</a></li>
+  		<li><a href="{% url 'Place:frontList' %}">会议室信息</a></li>
+  		<li class="active">详情查看</li>
+	</ul>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">会议室id:</div>
+		<div class="col-md-10 col-xs-6">{{ place.placeId }}</div>
+	</div>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">会议室类型:</div>
+		<div class="col-md-10 col-xs-6">{{ place.placeTypeObj.placeTypeName }}</div>
+	</div>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">会议室名称:</div>
+		<div class="col-md-10 col-xs-6">{{ place.placeName }}</div>
+	</div>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">会议室照片:</div>
+		<div class="col-md-10 col-xs-6"><img class="img-responsive" src="{{ place.placePhoto.url }}"  border="0px"/></div>
+	</div>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">容纳人数:</div>
+		<div class="col-md-10 col-xs-6">{{ place.personNum }}</div>
+	</div>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">会议室位置:</div>
+		<div class="col-md-10 col-xs-6">{{ place.placeLocation }}</div>
+	</div>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">会议室单价:</div>
+		<div class="col-md-10 col-xs-6">{{ place.price }}</div>
+	</div>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">详细介绍:</div>
+		<div class="col-md-10 col-xs-6">{{ place.placeDesc | safe  }}</div>
+	</div>
+	<div class="row bottom15"> 
+		<div class="col-md-2 col-xs-4 text-right bold">发布时间:</div>
+		<div class="col-md-10 col-xs-6">{{ place.addTime }}</div>
+	</div>
+	<div class="row bottom15">
+		<div class="col-md-2 col-xs-4"></div>
+		<div class="col-md-6 col-xs-6">
+			<button onclick="submitOrder();" class="btn btn-primary">我要预约</button>
+			<button onclick="history.back();" class="btn btn-info">返回</button>
+		</div>
+	</div>
+</div> 
+{% include 'footer.html' %}
+<script src="{% static 'plugins/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap.js' %}"></script>
+<script src="{% static 'plugins/wow.min.js' %}"></script>
+<script>
+function submitOrder() {
+    location.href = '/OrderInfo/userFrontAdd?placeId={{ place.placeId }}';
+}
+
+$(function(){
+        /*小屏幕导航点击关闭菜单*/
+        $('.navbar-collapse a').click(function(){
+            $('.navbar-collapse').collapse('hide');
+        });
+        new WOW().init();
+ })
+ </script> 
+</body>
+</html>
+

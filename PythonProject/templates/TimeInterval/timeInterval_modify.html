@@ -1,0 +1,35 @@
+{% load staticfiles %}
+{% include 'check_logstate.html' %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/timeInterval.css' %}" />
+<div id="timeInterval_EditDiv">
+	<form id="timeIntervalModifyForm" enctype="multipart/form-data"  method="post">
+        {% csrf_token %}
+		<div>
+			<span class="label">时段id:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="timeInterval_intervalId_modify" name="timeInterval.intervalId" value="{{ intervalId }}" style="width:200px" />
+			</span>
+		</div>
+
+		<div>
+			<span class="label">时段名称:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="timeInterval_intervalName_modify" name="timeInterval.intervalName" style="width:200px" />
+
+			</span>
+
+		</div>
+		<div>
+			<span class="label">商品数量:</span>
+			<span class="inputControl">
+				<input class="textbox" type="text" id="timeInterval_product_modify" name="timeInterval.product" style="width:80px" />
+
+			</span>
+
+		</div>
+		<div class="operation">
+			<a id="timeIntervalModifyButton" class="easyui-linkbutton">更新</a> 
+		</div>
+	</form>
+</div>
+<script src="{% static 'js/TimeInterval/timeInterval_modify.js' %}"></script>
